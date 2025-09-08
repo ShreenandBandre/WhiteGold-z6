@@ -29,15 +29,15 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
 
       <div
         className={cn(
-          "fixed left-0 top-0 z-50 h-full w-64 transform bg-sidebar border-r border-sidebar-border transition-transform duration-300 ease-in-out lg:translate-x-0",
-          isOpen ? "translate-x-0" : "-translate-x-full",
+          "fixed left-0 top-0 z-50 h-full w-64 transform bg-sidebar border-r border-sidebar-border transition-transform duration-300 ease-in-out",
+          isOpen ? "translate-x-0" : "-translate-x-full lg:-translate-x-full",
         )}
       >
         <div className="flex h-full flex-col">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
             <h2 className="text-lg font-semibold text-sidebar-foreground">AgriDashboard</h2>
-            <Button variant="ghost" size="sm" onClick={onClose} className="lg:hidden">
+            <Button variant="ghost" size="sm" onClick={onClose}>
               <X className="h-4 w-4" />
             </Button>
           </div>

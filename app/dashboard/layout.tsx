@@ -19,8 +19,8 @@ export default function DashboardLayout({
       <div className="min-h-screen bg-background">
         <DashboardSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-        <div className={`transition-all duration-300 ease-in-out ${sidebarOpen ? "lg:ml-64" : "lg:ml-64"}`}>
-          <Header onMenuClick={() => setSidebarOpen(true)} />
+        <div className={`transition-all duration-300 ease-in-out ${sidebarOpen ? "lg:ml-64" : "lg:ml-0"}`}>
+          <Header onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
 
           <main className="p-4 md:p-6">{children}</main>
         </div>

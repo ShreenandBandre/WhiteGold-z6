@@ -15,10 +15,10 @@ import { useRouter } from "next/navigation"
 
 interface HeaderProps {
   onMenuClick: () => void
-  title: string
+  sidebarOpen?: boolean
 }
 
-export function Header({ onMenuClick, title }: HeaderProps) {
+export function Header({ onMenuClick, sidebarOpen }: HeaderProps) {
   const { user, logout } = useAuth()
   const router = useRouter()
 
@@ -31,11 +31,11 @@ export function Header({ onMenuClick, title }: HeaderProps) {
     <header className="bg-card border-b border-border sticky top-0 z-30">
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="sm" className="lg:hidden" onClick={onMenuClick}>
+          <Button variant="ghost" size="sm" onClick={onMenuClick}>
             <Menu className="h-4 w-4" />
           </Button>
           <div>
-            <h1 className="text-xl font-semibold text-foreground">{title}</h1>
+            <h1 className="text-xl font-semibold text-foreground">Agricultural Dashboard</h1>
             <p className="text-sm text-muted-foreground">AI-powered agricultural insights and predictions</p>
           </div>
         </div>
