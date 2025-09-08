@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Cloud, Cpu, Leaf, TrendingUp, Zap, Eye } from "lucide-react"
+import { AuthNavigation } from "@/components/auth/auth-navigation"
 
 export default function HomePage() {
   return (
@@ -25,12 +26,7 @@ export default function HomePage() {
               Dashboard
             </Link>
           </nav>
-          <Link href="/dashboard">
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-              Get Started
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
+          <AuthNavigation />
         </div>
       </header>
 
