@@ -1,12 +1,13 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import AgricultureNews from "@/components/dashboard/agri-news"
 import {
   Cloud,
   TrendingUp,
-  Eye,
   Leaf,
   DollarSign,
   AlertTriangle,
@@ -16,24 +17,59 @@ import {
   BarChart3,
   Droplets,
   Thermometer,
+  Newspaper,
+  User,
 } from "lucide-react"
 
+type NewsArticle = {
+  title: string
+  description: string
+  source: { name: string }
+  url: string
+  publishedAt: string
+}
+
 export default function DashboardOverviewPage() {
+  const userName = "Farmer John" // Replace with dynamic user if available
+  const [news, setNews] = useState<NewsArticle[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const res = await fetch(
+          `https://newsapi.org/v2/everything?q=agriculture OR farming OR crops&language=en&sortBy=publishedAt&pageSize=5&apiKey=YOUR_NEWSAPI_KEY`
+        )
+        const data = await res.json()
+        if (data.articles) {
+          setNews(data.articles)
+        }
+      } catch (error) {
+        console.error("Error fetching news:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchNews()
+  }, [])
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-8">
+      {/* Welcome Section */}
+      <div className="flex items-center justify-between bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-2xl border">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Dashboard Overview</h1>
-          <p className="text-muted-foreground">Comprehensive agricultural insights and AI-powered recommendations</p>
+          <h2 className="text-2xl font-bold text-foreground">Welcome back, {userName} 👋</h2>
+          <p className="text-muted-foreground">Here’s what’s happening on your farm today</p>
         </div>
-        <Button>
-          <BarChart3 className="h-4 w-4 mr-2" />
-          Generate Report
-        </Button>
+        <div className="hidden md:flex items-center justify-center h-12 w-12 rounded-full bg-green-200">
+          <User className="h-6 w-6 text-green-800" />
+        </div>
       </div>
 
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Total Fields */}
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -52,6 +88,7 @@ export default function DashboardOverviewPage() {
           </CardContent>
         </Card>
 
+        {/* Avg Yield Prediction */}
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -70,24 +107,7 @@ export default function DashboardOverviewPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Plant Health Score</p>
-                <p className="text-2xl font-bold text-foreground">87%</p>
-                <p className="text-xs text-green-600 flex items-center mt-1">
-                  <CheckCircle className="h-3 w-3 mr-1" />
-                  Excellent
-                </p>
-              </div>
-              <div className="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center">
-                <Eye className="h-4 w-4 text-blue-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
+        {/* Carbon Footprint */}
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -109,6 +129,7 @@ export default function DashboardOverviewPage() {
 
       {/* Quick Actions and Insights */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Weather & Climate */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -152,6 +173,7 @@ export default function DashboardOverviewPage() {
           </CardContent>
         </Card>
 
+        {/* Recent Alerts */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -162,6 +184,7 @@ export default function DashboardOverviewPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
+              {/* Alerts List */}
               <div className="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
                 <AlertTriangle className="h-4 w-4 text-yellow-600 mt-0.5" />
                 <div>
@@ -194,60 +217,11 @@ export default function DashboardOverviewPage() {
         </Card>
       </div>
 
-      {/* AI Recommendations */}
+
+
+      {/* Daily Insights / Agriculture News */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-primary" />
-            AI-Powered Recommendations
-          </CardTitle>
-          <CardDescription>Personalized insights based on your farm data and market conditions</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border border-blue-200">
-              <h4 className="font-semibold text-blue-900 mb-2">Optimize Irrigation</h4>
-              <p className="text-sm text-blue-700 mb-3">
-                Reduce water usage by 15% using precision irrigation in Field C-3
-              </p>
-              <Button
-                size="sm"
-                variant="outline"
-                className="border-blue-300 text-blue-700 hover:bg-blue-200 bg-transparent"
-              >
-                Learn More
-              </Button>
-            </div>
-
-            <div className="p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-lg border border-green-200">
-              <h4 className="font-semibold text-green-900 mb-2">Increase Yield</h4>
-              <p className="text-sm text-green-700 mb-3">
-                Apply nitrogen fertilizer to boost corn yield by estimated 8%
-              </p>
-              <Button
-                size="sm"
-                variant="outline"
-                className="border-green-300 text-green-700 hover:bg-green-200 bg-transparent"
-              >
-                View Details
-              </Button>
-            </div>
-
-            <div className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg border border-purple-200">
-              <h4 className="font-semibold text-purple-900 mb-2">Market Timing</h4>
-              <p className="text-sm text-purple-700 mb-3">
-                Sell 40% of wheat inventory within 2 weeks for optimal profit
-              </p>
-              <Button
-                size="sm"
-                variant="outline"
-                className="border-purple-300 text-purple-700 hover:bg-purple-200 bg-transparent"
-              >
-                Price Analysis
-              </Button>
-            </div>
-          </div>
-        </CardContent>
+        <AgricultureNews />
       </Card>
     </div>
   )
