@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -17,9 +18,53 @@ import {
   BarChart3,
   Droplets,
   Thermometer,
-  Newspaper,
+  TreePine,
+  ArrowRight,
   User,
 } from "lucide-react"
+
+const featureCards = [
+  {
+    title: "Climate Prediction",
+    description: "AI-powered weather forecasting and climate analysis",
+    icon: Cloud,
+    href: "/dashboard/climate",
+    color: "bg-blue-50 border-blue-200",
+    iconColor: "text-blue-600",
+  },
+  {
+    title: "Yield Prediction",
+    description: "ML-based crop yield forecasting and optimization",
+    icon: TrendingUp,
+    href: "/dashboard/yield",
+    color: "bg-green-50 border-green-200",
+    iconColor: "text-green-600",
+  },
+  {
+    title: "Plant Health",
+    description: "Disease detection and plant health monitoring",
+    icon: TreePine,
+    href: "/dashboard/plant",
+    color: "bg-emerald-50 border-emerald-200",
+    iconColor: "text-emerald-600",
+  },
+  {
+    title: "Carbon Analytics",
+    description: "Sustainability tracking and carbon footprint analysis",
+    icon: Leaf,
+    href: "/dashboard/carbon",
+    color: "bg-teal-50 border-teal-200",
+    iconColor: "text-teal-600",
+  },
+  {
+    title: "Price Prediction",
+    description: "Market analysis and commodity price forecasting",
+    icon: DollarSign,
+    href: "/dashboard/price",
+    color: "bg-yellow-50 border-yellow-200",
+    iconColor: "text-yellow-600",
+  },
+]
 
 type NewsArticle = {
   title: string
@@ -30,7 +75,7 @@ type NewsArticle = {
 }
 
 export default function DashboardOverviewPage() {
-  const userName = "Farmer John" // Replace with dynamic user if available
+  const userName = "Farmer John"
   const [news, setNews] = useState<NewsArticle[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -38,7 +83,7 @@ export default function DashboardOverviewPage() {
     const fetchNews = async () => {
       try {
         const res = await fetch(
-          `https://newsapi.org/v2/everything?q=agriculture OR farming OR crops&language=en&sortBy=publishedAt&pageSize=5&apiKey=YOUR_NEWSAPI_KEY`
+          `https://newsapi.org/v2/everything?q=agriculture OR farming OR crops&language=en&sortBy=publishedAt&pageSize=5&apiKey=YOUR_NEWSAPI_KEY`,
         )
         const data = await res.json()
         if (data.articles) {
@@ -60,7 +105,7 @@ export default function DashboardOverviewPage() {
       <div className="flex items-center justify-between bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-2xl border">
         <div>
           <h2 className="text-2xl font-bold text-foreground">Welcome back, {userName} 👋</h2>
-          <p className="text-muted-foreground">Here’s what’s happening on your farm today</p>
+          <p className="text-muted-foreground">Here's what's happening on your farm today</p>
         </div>
         <div className="hidden md:flex items-center justify-center h-12 w-12 rounded-full bg-green-200">
           <User className="h-6 w-6 text-green-800" />
@@ -125,6 +170,54 @@ export default function DashboardOverviewPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Market Price */}
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Avg Market Price</p>
+                <p className="text-2xl font-bold text-foreground">$245/T</p>
+                <p className="text-xs text-green-600 flex items-center mt-1">
+                  <ArrowUp className="h-3 w-3 mr-1" />
+                  +5.2% this week
+                </p>
+              </div>
+              <div className="h-8 w-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                <DollarSign className="h-4 w-4 text-yellow-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold text-foreground mb-4">Agricultural Intelligence Features</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {featureCards.map((feature) => {
+            const Icon = feature.icon
+            return (
+              <Link key={feature.href} href={feature.href}>
+                <Card className={`${feature.color} hover:shadow-md transition-shadow cursor-pointer`}>
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <Icon className={`h-5 w-5 ${feature.iconColor}`} />
+                          <h4 className="font-semibold text-foreground">{feature.title}</h4>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-3">{feature.description}</p>
+                        <Button variant="ghost" size="sm" className="p-0 h-auto text-primary hover:text-primary/80">
+                          Explore <ArrowRight className="h-3 w-3 ml-1" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            )
+          })}
+        </div>
       </div>
 
       {/* Quick Actions and Insights */}
@@ -166,9 +259,11 @@ export default function DashboardOverviewPage() {
                 </Badge>
               </div>
 
-              <Button variant="outline" className="w-full bg-transparent">
-                View Detailed Forecast
-              </Button>
+              <Link href="/dashboard/climate">
+                <Button variant="outline" className="w-full bg-transparent">
+                  View Detailed Forecast
+                </Button>
+              </Link>
             </div>
           </CardContent>
         </Card>
@@ -216,8 +311,6 @@ export default function DashboardOverviewPage() {
           </CardContent>
         </Card>
       </div>
-
-
 
       {/* Daily Insights / Agriculture News */}
       <Card>
